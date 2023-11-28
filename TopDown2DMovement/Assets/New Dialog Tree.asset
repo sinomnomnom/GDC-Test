@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbd373716c9a6db49b619799cc40b341, type: 3}
+  m_Name: New Dialog Tree
+  m_EditorClassIdentifier: 
+  sections:
+  - dialog:
+    - heyo!
+    endAfterDialog: 0
+    branchPoint:
+      question: whats your name???
+      answers:
+      - answerLabel: Jack
+        nextElement: 1
+      - answerLabel: Jeremy meyerson the thirteenth, heir to the duke of scantertown
+        nextElement: 2
+      - answerLabel: julie
+        nextElement: 3
+  - dialog:
+    - ew
+    endAfterDialog: 1
+    branchPoint:
+      question: 
+      answers: []
+  - dialog:
+    - cool bro
+    endAfterDialog: 1
+    branchPoint:
+      question: what is your name??
+      answers:
+      - answerLabel: Jack
+        nextElement: 2
+      - answerLabel: jill
+        nextElement: 3
+  - dialog:
+    - '*gasp*'
+    endAfterDialog: 0
+    branchPoint:
+      question: take that back you insolent child
+      answers:
+      - answerLabel: lol no
+        nextElement: 4
+      - answerLabel: sure dude
+        nextElement: 4
+  - dialog:
+    - kids these days...
+    endAfterDialog: 1
+    branchPoint:
+      question: take that back you insolent child
+      answers:
+      - answerLabel: lol no
+        nextElement: 4
+      - answerLabel: sure dude
+        nextElement: 4
+  - dialog:
+    - 'Hey!
+
+      Quit bugging me!'
+    endAfterDialog: 1
+    branchPoint:
+      question: take that back you insolent child
+      answers:
+      - answerLabel: lol no
+        nextElement: 4
+      - answerLabel: sure dude
+        nextElement: 4
