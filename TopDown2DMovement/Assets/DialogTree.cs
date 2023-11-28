@@ -5,6 +5,8 @@ using UnityEngine;
 public class DialogTree : ScriptableObject
 {
     [System.Serializable]
+    
+    //stores all the data for the dialog of the npc it is attached to goes in the npc script
     public struct DialogSection
     {
         [TextArea]

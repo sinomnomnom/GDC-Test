@@ -10,27 +10,35 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float interactDistance = 2;
-    bool inConversation;
+   
+    //movement
     public float moveSpeed = 1f;
     public ContactFilter2D movementFilter;
     Vector2 movementInput;
     Rigidbody2D rb;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     public float collisionOffset = 0.05f;
+
     Animator animator;
-    public LayerMask npcLayerMask;
+    
+   
+    //interact objects
     public LayerMask interactableObjectLayerMask;
     bool InteractObjectShown;
-    public DialogBoxController dialogBoxController;
+
+    //dialog
+    bool inConversation;
     private bool canMove = true;
+    [SerializeField] float interactDistance = 2;
+    public LayerMask npcLayerMask;
+    public DialogBoxController dialogBoxController;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>(); // access rigidbody and animator components
         animator = GetComponent<Animator>();
-        animator.SetFloat("faceY", -1);
+        animator.SetFloat("faceY", -1);//start looking down
         inConversation = false;
         InteractObjectShown = false;
         dialogBoxController.InteractObjectShowing.AddListener(SetInteractShow);
@@ -40,7 +48,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //who needs one of these
+    }
 
+    void OnMove(InputValue movementValue) //called whenever a "move" input is presed using the new unity input sytem
+    {
+        if (canMove)
+        {
+            movementInput = (movementValue.Get<Vector2>()).normalized;
+            animator.SetFloat("moveX", movementInput.x);
+            animator.SetFloat("moveY", movementInput.y);
+            if (movementInput.x != 0 || movementInput.y != 0)
+            {
+                animator.SetFloat("faceX", movementInput.x);
+                animator.SetFloat("faceY", movementInput.y);
+            }
+        }
+        else
+        {
+            movementInput = Vector2.zero;
+        }
     }
 
     private void FixedUpdate()
@@ -85,28 +112,12 @@ public class PlayerController : MonoBehaviour
             return false;
         }
     }
-    void OnInteract()
+    void OnInteract() //uses unity input system 
     {
         Interact();
         Debug.Log("interactcalled");
     }
-    void OnMove(InputValue movementValue)
-    {
-        if (canMove)
-        {
-            movementInput = (movementValue.Get<Vector2>()).normalized;
-            animator.SetFloat("moveX", movementInput.x);
-            animator.SetFloat("moveY", movementInput.y);
-            if (movementInput.x != 0 || movementInput.y != 0)
-            {
-                animator.SetFloat("faceX", movementInput.x);
-                animator.SetFloat("faceY", movementInput.y);
-            }
-        } else
-        {
-            movementInput = Vector2.zero;
-        }
-    }
+   
     public void Interact()
     {
         if (inConversation)
@@ -181,7 +192,7 @@ public class PlayerController : MonoBehaviour
     {
             inConversation = false;
     }
-    private void OnEnable()
+    private void OnEnable() //called when this object is enabled/disabled
     { 
             DialogBoxController.OnDialogStarted += JoinConversation;
             DialogBoxController.OnDialogEnded += LeaveConversation;
@@ -195,14 +206,12 @@ public class PlayerController : MonoBehaviour
     public void DisablePlayerMovement()
     {
         canMove = false;
-       
     }
 
     // Call this method when you want to allow the player to move again
     public void EnablePlayerMovement()
     {
         canMove = true;
-       
     }
     void SetInteractShow()
     {
@@ -212,6 +221,6 @@ public class PlayerController : MonoBehaviour
     void SetInteractHide()
     {
         InteractObjectShown = false;
-        Debug.Log("what???");
+        Debug.Log("what???");//dont mind these
     }
 } 

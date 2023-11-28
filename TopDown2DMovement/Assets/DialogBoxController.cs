@@ -10,6 +10,7 @@ using UnityEngine.Events;
 
 public class DialogBoxController : MonoBehaviour
 {
+    //dialog UI
     public static DialogBoxController Instance;
     [SerializeField] TextMeshProUGUI dialogText;
     [SerializeField] TextMeshProUGUI nameText;
@@ -17,8 +18,8 @@ public class DialogBoxController : MonoBehaviour
     [SerializeField] GameObject answerBox;
     [SerializeField] Button[] answerObjects;
     [SerializeField] CanvasGroup dialogcanvasGroup;
-    [SerializeField] CanvasGroup interactableObjectcanvasGroup;
-    [SerializeField] GameObject ObjectUI;
+
+    //dialog controller
     public static event Action OnDialogStarted;
     public static event Action OnDialogEnded;
     bool skipLineTriggered;
@@ -26,13 +27,16 @@ public class DialogBoxController : MonoBehaviour
     int answerIndex;
     public float charactersPerSecond = 5;
     bool isTyping;
-    public float targetAlpha = 1f;
-    public float lerpDuration = .5f;
+
+    //object ui
+    [SerializeField] CanvasGroup interactableObjectcanvasGroup;
+    [SerializeField] GameObject ObjectUI;
+    public float targetAlpha = 1f;//used in dialog too
+    public float lerpDuration = .5f;//i think i forgot
     public Image imageUI;
     public PlayerController playerController;
     public UnityEvent InteractObjectShowing;
     public UnityEvent InteractObjectHidden;
-
     public RectTransform imageRectTransform;
     // Start is called before the first frame update
     void Start()
@@ -46,14 +50,14 @@ public class DialogBoxController : MonoBehaviour
         PlayerController playerController = FindObjectOfType<PlayerController>();
         RectTransform imageRectTransform = imageUI.GetComponent<RectTransform>();
 
-}
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //this thing is useless 
     }
-    private void Awake()
+    private void Awake() 
     {
         if (Instance == null)
         {
@@ -76,6 +80,8 @@ public class DialogBoxController : MonoBehaviour
         PlayerController playerController = FindObjectOfType<PlayerController>();
         playerController.DisablePlayerMovement();
     }
+
+
     IEnumerator RunDialog(DialogTree dialogTree, int section)
     {
         skipLineTriggered = false;
@@ -109,6 +115,7 @@ public class DialogBoxController : MonoBehaviour
         StartCoroutine(RunDialog(dialogTree, dialogTree.sections[section].branchPoint.answers[answerIndex].nextElement));
     }
 
+
     void ResetBox()
     {
         StopAllCoroutines();
@@ -118,6 +125,8 @@ public class DialogBoxController : MonoBehaviour
         answerTriggered = false;
         playerController.EnablePlayerMovement();
     }
+
+
     void ShowAnswers(DialogTree.BranchPoint branchPoint)
     {
         answerBox.SetActive(true);
@@ -140,6 +149,8 @@ public class DialogBoxController : MonoBehaviour
         answerTriggered = true;
         Debug.Log("answerrecieved?");
     }
+
+
     IEnumerator TypeText(string line)
     {
         string textBuffer = null;
@@ -184,21 +195,23 @@ public class DialogBoxController : MonoBehaviour
             isTyping = false;
         }
     }
+
+
     IEnumerator LerpCanvasGroupAlpha(float targetAlpha,CanvasGroup canvasGroup)
     {
         float elapsedTime = 0f;
         float startAlpha = canvasGroup.alpha;
         while (elapsedTime < lerpDuration)
         {
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / lerpDuration);
             elapsedTime += Time.deltaTime;
-
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / lerpDuration);
             yield return null; // Wait for the next frame
         }
-
         // Ensure the alpha reaches the target exactly
         canvasGroup.alpha = targetAlpha;
     }
+
+
     IEnumerator LerpSize(Vector2 targetSize, float speed)
     {
         // Ensure that the RectTransform component is assigned
@@ -214,19 +227,19 @@ public class DialogBoxController : MonoBehaviour
                 imageRectTransform.sizeDelta = newSize;
                 yield return null;
             }
-
+            imageRectTransform.sizeDelta = targetSize;
             // Set the new size to the RectTransform
-
             yield break;
         }
         else
         {
-            Debug.LogWarning("Image RectTransform not assigned. Please assign it in the Unity Editor.");
             yield break;
         }
     }
-        public void ShowObject(string path)
-   {
+
+
+    public void ShowObject(string path)
+    {
         // Load the image file
         Texture2D texture = LoadImageFromFile(path);
         SetImage(texture);
@@ -235,12 +248,14 @@ public class DialogBoxController : MonoBehaviour
         dialogPanel.SetActive(false);
         StopAllCoroutines();
         ObjectUI.SetActive(true);
+        interactableObjectcanvasGroup.alpha = 0f;
         playerController.DisablePlayerMovement();
         InteractObjectShowing.Invoke();
-        StartCoroutine(LerpSize(new Vector2(800,800),.75f));
         StartCoroutine(LerpCanvasGroupAlpha(1f, interactableObjectcanvasGroup));
-        
+        StartCoroutine(LerpSize(new Vector2(800,800),.75f));
     }
+
+
     Texture2D LoadImageFromFile(string path)
     {
         byte[] fileData = System.IO.File.ReadAllBytes(path);
@@ -248,6 +263,8 @@ public class DialogBoxController : MonoBehaviour
         texture.LoadImage(fileData);
         return texture;
     }
+
+
     public void SetImage(Texture2D texture)
     {
         if (imageUI != null)
@@ -260,6 +277,8 @@ public class DialogBoxController : MonoBehaviour
             Debug.LogError("Image UI reference not set in the UIManager script.");
         }
     }
+
+
     IEnumerator HideInteractObject()
     {
         StartCoroutine(LerpSize(new Vector2(400, 400),.75f));
@@ -270,6 +289,8 @@ public class DialogBoxController : MonoBehaviour
         ObjectUI.SetActive(false);
        
     }
+
+
     public void HideInteractObjectStart()
     {
         StartCoroutine(HideInteractObject());

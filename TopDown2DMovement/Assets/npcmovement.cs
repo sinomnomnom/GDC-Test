@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class npcmovement : MonoBehaviour
 {
+    //basically just the player movement but without the player *gasp*
     Vector2 movementInput;
     public Animator animator;
     public Rigidbody2D rb;
@@ -12,7 +13,9 @@ public class npcmovement : MonoBehaviour
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
     public ContactFilter2D movementFilter;
     public Transform player;
+
     // Start is called before the first frame update
+
     void Start()
     {
         // Find the player GameObject using a tag (make sure your player has the specified tag)
@@ -22,15 +25,17 @@ public class npcmovement : MonoBehaviour
         {
             Debug.LogError("Player not found! Make sure the player has the 'Player' tag.");
         }
-        StartCoroutine(FollowPlayer());
+        StartCoroutine(FollowPlayer());//i put this in start just to test but it could be useful with some logic to start it
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //so useless omg why did they even make this???
     }
+
+
     private void FixedUpdate()
     {
         if (movementInput != Vector2.zero) //if input check using trymove in direction of input if fail check in only x and then only y directions
@@ -62,6 +67,8 @@ public class npcmovement : MonoBehaviour
             animator.SetBool("isMoving", false);
         }
     }
+
+
     private bool TryMove(Vector2 direction) //use rigidbody2d.cast to determine if colliders in direction of attempted move
     {
         int count = rb.Cast(direction, movementFilter, castCollisions, moveSpeed * Time.fixedDeltaTime * collisionOffset);
@@ -78,7 +85,8 @@ public class npcmovement : MonoBehaviour
         }
     }
 
-    IEnumerator FollowPlayer()
+
+    IEnumerator FollowPlayer()//this thing just makes the npc look for the player and then run untill a distance 
     {
         if (player != null)
         {
@@ -91,7 +99,7 @@ public class npcmovement : MonoBehaviour
 
                 // Normalize the direction to get a unit vector
                 Vector3 normalizedDirection = directionToPlayer.normalized;
-                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y) - new Vector2(0, 0.75f), directionToPlayer,Color.red);
+                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y) - new Vector2(0, 0.75f), directionToPlayer,Color.red);//the -.75 is bc the collider of the player is that distance from the pivot which i think is what unity uses for the center
                 RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x,transform.position.y)-new Vector2(0,0.75f),directionToPlayer,Mathf.Infinity,~layerMask);
                 if (hit.collider != null && hit.collider.CompareTag("Player"))
                 {
@@ -114,8 +122,9 @@ public class npcmovement : MonoBehaviour
 
                 }
             }
-                movementInput = Vector2.zero;
-                yield break;
+
+            movementInput = Vector2.zero;
+            yield break;
         }
     }
 }

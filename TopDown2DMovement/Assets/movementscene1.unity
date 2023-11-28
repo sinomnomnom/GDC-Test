@@ -1146,12 +1146,12 @@ MonoBehaviour:
   - {fileID: 2009158522}
   - {fileID: 315245214}
   dialogcanvasGroup: {fileID: 1359364730}
-  interactableObjectcanvasGroup: {fileID: 1079694988}
-  ObjectUI: {fileID: 982395845}
   answerTriggered: 0
   charactersPerSecond: 35
+  interactableObjectcanvasGroup: {fileID: 1079694988}
+  ObjectUI: {fileID: 982395845}
   targetAlpha: 1
-  lerpDuration: 0.25
+  lerpDuration: 0.5
   imageUI: {fileID: 982395847}
   playerController: {fileID: 8387749314763868795}
   InteractObjectShowing:
@@ -3065,8 +3065,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -775212951
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 1908782622, guid: 8b03511194296dd458f39cc0aeb9af49, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3172,7 +3172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97f4c73fbb26ff745b9a837868433de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 2.5
   moveSpeed: 5
   movementFilter:
     useTriggers: 0
@@ -3189,12 +3188,13 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   collisionOffset: 1
-  npcLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
   interactableObjectLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  interactDistance: 2.5
+  npcLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   dialogBoxController: {fileID: 610186163}
 --- !u!95 &9125880045479898681
 Animator:
